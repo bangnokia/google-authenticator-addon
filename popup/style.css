@@ -2,12 +2,29 @@
 	font-family: 'Lato';
 	src: url('../fonts/Lato-Light.ttf');
 }
-.content {
+body {
+	font-family: 'Lato', sans-serif;
+}
+.text-center {
+	text-align: center;
+}
+.header {
+	background-color: #ddd;
+	padding: 5px;
+	padding-left: 5%;
+}
+.setting-btn {
+	float: right;
+	cursor: pointer;
+}
+.setting-btn img {
+	width: 20px;
+}
+.container {
 	width: 250px;
 	height: auto;
 	min-height: 100px;
 	position: relative;
-	font-family: 'Lato', sans-serif;
 }
 .block {
 	width: 90%;
