@@ -1,17 +1,17 @@
 (function() {
 
-	var App = function() {
+    var App = function() {
 
-		this.run = function() {
-			this.init();
-		};
+        this.run = function() {
+            this.init();
+        };
 
-		this.init = function() {
-			
-		};
-	};
+        this.init = function() {
+            
+        };
+    };
 
-	var app = new App();
+    var app = new App();
 
-	app.run();
+    app.run();
 })();
