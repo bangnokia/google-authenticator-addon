@@ -31,6 +31,7 @@
 
         var bindEvents = function() {
             settingIcon.addEventListener('click', function(e) {
+                initSettingPage();
                 show(settingPage);
                 show(settingPageActions, 'inline-block');
 
@@ -51,6 +52,23 @@
             saveSettingIcon.addEventListener('click', saveSettings);
         };
 
+        var initSettingPage = function() {
+
+            while(settingPage.hasChildNodes()) {
+                settingPage.removeChild(settingPage.lastChild);
+            }
+
+            let gettingAllAccounts = browser.storage.local.get(null);
+
+            gettingAllAccounts.then((results) => {
+                for (let key in results) {
+                    var account = results[key];
+                    console.log(account);
+                    settingPage.appendChild(initFormGroup(account));
+                }
+            }, onError);
+        }
+
         var addNewAccount = function() {
 
             settingPage.appendChild( initFormGroup());
@@ -58,6 +76,7 @@
 
         var initFormGroup = function(data) {
             data = data || {};
+            // console.log(data);
             var formGroup = document.createElement('div');
             var account = document.createElement('input');
             var secret = document.createElement('input');
@@ -81,14 +100,50 @@
             formGroup.appendChild(deleteButton);
 
             deleteButton.addEventListener('click', function() {
-                this.parentNode.remove(); 
+                var parent = this.parentNode;
+                let key = parent.querySelector('.account').value;
+                let deletingItem = browser.storage.local.remove(key);
+                deletingItem.then(() => {
+                    parent.parentNode.removeChild(parent);
+                }, onError);
             });
 
             return formGroup;
         }
 
         var saveSettings = function() {
+            console.log('click save');
+            var formGroups = document.querySelectorAll('.form-group');
+            var data = [];
+
+            var deletingItems = browser.storage.local.clear();
+
+            deletingItems.then(() => {
+                console.log(formGroups.length);
+                for(var i = 0; i < formGroups.length; i++ ) {
+                    var account = formGroups[i].querySelector('.account');
+                    var secret = formGroups[i].querySelector('.secret');
+
+                    var obj = {
+                        'account': account.value,
+                        'secret': secret.value
+                    };
+
+                    if (obj.account.trim() != '' && obj.secret.trim() != '') {
+                        var item = browser.storage.local.set({
+                            [obj.account] : obj
+                        });
+                        item.then((result) => {
+                            console.log(result);
+                            // let x = browser.storage.local.get(null);
+                            // x.then((result) => {console.log(result)}, onError);
+                        }, onError);
+                    }
+                }
+            }, onError);
+
             
+
         };
 
         var hide = function(selector) {
@@ -98,6 +153,10 @@
         var show = function(selector, blockType) {
             blockType = blockType || 'block';
             selector.style.display = blockType;
+        };
+
+        var onError = function(error) {
+            console.log(error);
         };
     };
 
