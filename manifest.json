@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "Google Authenticator",
+	"version": "3.14",
+
+	"description": "Google authenticate code generation",
+	"homepage_url": "http://daudau.cc",
+	"icons": {
+		"48": "icons/icon48.png"
+	},
+
+	"browser_action": {
+		"default_icon": "icons/icon48.png",
+		"default_title": "Google Authenticator",
+		"default_popup": "popup/popup.html"
+	}
+}

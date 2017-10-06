@@ -1,0 +1,44 @@
+@font-face {
+	font-family: 'Lato';
+	src: url('../fonts/Lato-Light.ttf');
+}
+.content {
+	width: 250px;
+	height: auto;
+	min-height: 100px;
+	position: relative;
+	font-family: 'Lato', sans-serif;
+}
+.block {
+	width: 90%;
+	display: block;
+	margin: 0 auto;
+	margin-top: 10px;
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+.block:hover .line-time {
+	background-color: orange;
+}
+
+.code {
+	text-align: left;
+	font-size: 30px;
+	color: #000;
+	font-weight: 100;
+	letter-spacing: 2px;
+	/*color: #00bcd4;*/
+	color: #000;
+}
+.name {
+	font-size: 15px;
+	color: #008ba3;
+}
+.line-time {
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #000;
+	margin-top: 7px;
+	transition: 0.5s all;
+}
