@@ -13,5 +13,9 @@
 		"default_icon": "icons/icon48.png",
 		"default_title": "Google Authenticator",
 		"default_popup": "popup/popup.html"
-	}
+	},
+
+	"permissions": [
+		"storage"
+	]
 }

@@ -5,19 +5,31 @@
 body {
 	font-family: 'Lato', sans-serif;
 }
+.d-none {
+	display: none;
+}
+.d-block {
+	display: inline-block;
+}
+.d-inline-block {
+	display: inline-block;
+}
 .text-center {
 	text-align: center;
+}
+.clear {
+	clear: both;
 }
 .header {
 	background-color: #ddd;
 	padding: 5px;
 	padding-left: 5%;
 }
-.setting-btn {
+.header span {
 	float: right;
 	cursor: pointer;
 }
-.setting-btn img {
+.header span img {
 	width: 20px;
 }
 .container {
@@ -26,6 +38,8 @@ body {
 	min-height: 100px;
 	position: relative;
 }
+
+/* main page */
 .block {
 	width: 90%;
 	display: block;
@@ -58,4 +72,30 @@ body {
 	background-color: #000;
 	margin-top: 7px;
 	transition: 0.5s all;
+}
+
+/* setting page*/
+
+.setting-page {
+	display: none;
+	position: relative;
+	padding-top: 10px;
+}
+.setting-page .form-group:last-child {
+	border-bottom: none;
+}
+.form-group {
+	margin: 20px 0;
+	padding: 10px 0;
+	width: 90%;
+	display: block;
+	margin: 0 auto;
+	/*border-bottom: 1px solid #000;*/
+}
+.form-group input {
+	display: inline-block;
+	margin: 0 auto;
+	margin-bottom: 5px;
+	width: 100%;
+	box-sizing: border-box;
 }
