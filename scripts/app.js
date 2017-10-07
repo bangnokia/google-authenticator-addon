@@ -9,7 +9,9 @@
 
     var App = function() {
 
-        var block = document.querySelector('.block');
+        // var block = document.querySelector('.block');
+        
+        var container = document.querySelector('.container');
         var mainPage = document.querySelector('.main-page');
         var settingPage = document.querySelector('.setting-page');
 
@@ -115,7 +117,7 @@
             var toRemove = 100 / expirySeconds / framesPerSecond;
             var loop = setInterval(function() {
                 i++;
-                console.log(i);
+                // console.log(i);
                 lineTime.style.width = (100 - i * toRemove) + '%';
 
                 if ( i == expirySeconds * framesPerSecond) {
@@ -125,8 +127,49 @@
 
             }, 1000/framesPerSecond);
 
+            block.addEventListener('click', copyClipboard);
+
             return block;
-        }
+        };
+
+        var copyClipboard = function() {
+            console.log('copy clipboard funtion ');
+            let code = this.querySelector('.code');
+            let textarea = document.createElement('textarea');
+            textarea.setAttribute('class', 'copy-area');
+            textarea.value = code.textContent;
+
+            console.log('textarea value: ' + textarea.value);
+
+            container.appendChild(textarea);
+
+            textarea.select();
+
+            try {
+                var text = document.execCommand('copy');
+                console.log('copied text is: ' + text);
+                notice('Copied!');
+            } catch (ex) {
+                notice('Can not copied!');
+            } finally {
+                container.removeChild(textarea);
+            }
+
+        };
+
+        var notice = function(msg) {
+            var alert = document.createElement('div');
+            alert.setAttribute('class', 'alert');
+            alert.textContent = msg;
+
+            container.appendChild(alert);
+
+            setTimeout(function() {
+                container.removeChild(alert);
+            }, 500);
+        };
+
+
 
         var reRenderBlock = function(block, data) {
             var code = block.querySelector('.code');
@@ -205,12 +248,11 @@
         var saveSettings = function() {
             console.log('click save');
             var formGroups = document.querySelectorAll('.form-group');
-            var data = [];
+            var data = {};
 
             var deletingItems = browser.storage.local.clear();
 
             deletingItems.then(() => {
-                console.log(formGroups.length);
                 for(var i = 0; i < formGroups.length; i++ ) {
                     var account = formGroups[i].querySelector('.account');
                     var secret = formGroups[i].querySelector('.secret');
@@ -221,17 +263,22 @@
                     };
 
                     if (obj.account.trim() != '' && obj.secret.trim() != '') {
-                        var item = browser.storage.local.set({
-                            [obj.account] : obj
-                        });
-                        item.then((result) => {
-                            console.log(result);
-                            // let x = browser.storage.local.get(null);
-                            // x.then((result) => {console.log(result)}, onError);
-                        }, onError);
+                        data[obj.account] = obj;
                     }
                 }
+
+                item = browser.storage.local.set(data);
+                // console.log(data);
+                item.then(() => {
+                    renderMainPage();
+                }, onError);
+
             }, onError);
+
+            // var item = browser.storage.local.set({
+            //     [obj.account] : obj
+            // });
+
         };
 
         var hide = function(selector) {

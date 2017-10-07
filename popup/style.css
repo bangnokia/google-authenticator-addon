@@ -20,6 +20,24 @@ body {
 .clear {
 	clear: both;
 }
+.alert {
+	position: absolute;
+	width: 80px;
+	height: auto;
+	padding: 5px;
+	top: 50%;
+	left: calc(50% - 40px);
+	text-align: center;
+	background-color: rgba(255,255,107, 0.5)
+}
+.copy-area {
+	display: inline-block;
+	position: absolute;
+	top: -999px;
+	left: -990px;
+	height: 1px;
+	width: 1px;
+}
 .header {
 	background-color: #ddd;
 	padding: 5px;
