@@ -18,6 +18,10 @@
         var saveSettingIcon = document.querySelector('.setting-btn-save');
         var addSettingIcon = document.querySelector('.setting-btn-add');
         var settingPageActions = document.querySelector('.setting-page-action');
+
+        var totp;
+        var expirySeconds = 30;
+        var framesPerSecond = 24;
         
 
         this.run = function() {
@@ -26,12 +30,14 @@
         };
 
         this.init = function() {
-
+            totp = new jsOTP.totp(expirySeconds);
+            renderMainPage();
+            renderSettingPage();
         };
 
         var bindEvents = function() {
             settingIcon.addEventListener('click', function(e) {
-                initSettingPage();
+                // initSettingPage();
                 show(settingPage);
                 show(settingPageActions, 'inline-block');
 
@@ -52,11 +58,96 @@
             saveSettingIcon.addEventListener('click', saveSettings);
         };
 
-        var initSettingPage = function() {
+        var renderMainPage = function() {
+            
+            removeAllChild(mainPage);
 
-            while(settingPage.hasChildNodes()) {
-                settingPage.removeChild(settingPage.lastChild);
+            let gettingAllAccounts = browser.storage.local.get(null);
+            gettingAllAccounts.then((accounts) => {
+                for (let key in accounts) {
+                    let account = accounts[key];
+                    let block = renderBlock(account);
+                    mainPage.appendChild(block);
+                }
+            }, onError);
+        };
+
+        var removeAllChild = function(node) {
+            while (node.hasChildNodes()) {
+                node.removeChild(node.lastChild);
             }
+        };
+
+        var renderBlock = function(data, block) {
+            if (block) {
+                var code = block.querySelector('.code');
+                var name = block.querySelector('.name');
+                var lineTime = block.querySelector('.line-time');
+            } else {
+                var block = document.createElement('div');
+                var code = document.createElement('div');
+                var name = document.createElement('div');
+                var lineTime = document.createElement('div');
+            }
+            
+
+            block.setAttribute('class', 'block');
+            code.setAttribute('class', 'code');
+
+            let timeCode;
+            try {
+                timeCode = totp.getOtp(data.secret);
+            } catch ( ex) {
+                timeCode = 'Error';
+            }
+            code.textContent = timeCode;
+
+            name.setAttribute('class', 'name');
+            name.textContent = data.account;
+            lineTime.setAttribute('class', 'line-time');
+            lineTime.style.width = '100%';
+
+            block.appendChild(code);
+            block.appendChild(name);
+            block.appendChild(lineTime);
+
+            var i = 0;
+            var toRemove = 100 / expirySeconds / framesPerSecond;
+            var loop = setInterval(function() {
+                i++;
+                console.log(i);
+                lineTime.style.width = (100 - i * toRemove) + '%';
+
+                if ( i == expirySeconds * framesPerSecond) {
+                    clearInterval(loop);
+                    renderBlock(data, block);
+                }
+
+            }, 1000/framesPerSecond);
+
+            return block;
+        }
+
+        var reRenderBlock = function(block, data) {
+            var code = block.querySelector('.code');
+            var name = block.querySelector('.name');
+            var lineTime = block.querySelector('.line-time');
+
+            let timeCode;
+            try {
+                timeCode = totp.getOtp(data.secret);
+            } catch ( ex) {
+                timeCode = 'Error';
+            }
+
+            code.textContent = timeCode;
+
+            lineTime.style.width = '100%';
+        };
+
+        var renderSettingPage = function() {
+
+            removeAllChild(settingPage);
 
             let gettingAllAccounts = browser.storage.local.get(null);
 
@@ -141,9 +232,6 @@
                     }
                 }
             }, onError);
-
-            
-
         };
 
         var hide = function(selector) {
