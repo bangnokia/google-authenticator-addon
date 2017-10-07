@@ -151,6 +151,7 @@
             var i = 0;
             var toRemove = 100 / expirySeconds / framesPerSecond;
             var loop = setInterval(function() {
+                i++;
                 lineTime.style.width = (100 - i * toRemove) + '%';
 
                 if ( i == expirySeconds * framesPerSecond) {
