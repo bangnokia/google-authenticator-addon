@@ -9,8 +9,6 @@
 
     var App = function() {
 
-        // var block = document.querySelector('.block');
-        
         var container = document.querySelector('.container');
         var mainPage = document.querySelector('.main-page');
         var settingPage = document.querySelector('.setting-page');
@@ -26,6 +24,10 @@
         var framesPerSecond = 24;
         
 
+        /**
+         * bootstrap method
+         * @return method 
+         */
         this.run = function() {
             this.init();
             bindEvents();
@@ -37,29 +39,53 @@
             renderSettingPage();
         };
 
+        /**
+         * events should be bind here
+         * 
+         * @return {[type]} [description]
+         */
         var bindEvents = function() {
-            settingIcon.addEventListener('click', function(e) {
-                // initSettingPage();
-                show(settingPage);
-                show(settingPageActions, 'inline-block');
 
-                hide(mainPage);
-                hide(settingIcon);
-            });
+            settingIcon.addEventListener('click', showSettingPage);
 
-            closeSettingIcon.addEventListener('click', function(e) {
-                hide(settingPage);
-                hide(settingPageActions);
-
-                show(mainPage);
-                show(settingIcon, 'inline-block');
-            });
+            closeSettingIcon.addEventListener('click', showMainPage);
 
             addSettingIcon.addEventListener('click', addNewAccount);
 
             saveSettingIcon.addEventListener('click', saveSettings);
         };
 
+        /**
+         * display main page
+         * 
+         * @return {[type]} [description]
+         */
+        var showMainPage = function() {
+                hide(settingPage);
+                hide(settingPageActions);
+
+                show(mainPage);
+                show(settingIcon, 'inline-block');
+        };
+
+        /**
+         * display setting page
+         * 
+         * @return {[type]} [description]
+         */
+        var showSettingPage = function() {
+            show(settingPage);
+            show(settingPageActions, 'inline-block');
+
+            hide(mainPage);
+            hide(settingIcon);
+        };
+
+        /**
+         * render main page content
+         * 
+         * @return {[type]} [description]
+         */
         var renderMainPage = function() {
             
             removeAllChild(mainPage);
@@ -80,6 +106,13 @@
             }
         };
 
+        /**
+         * render block of main page
+         * 
+         * @param  {[type]} data  [description]
+         * @param  {[type]} block [description]
+         * @return {[type]}       [description]
+         */
         var renderBlock = function(data, block) {
             if (block) {
                 var code = block.querySelector('.code');
@@ -97,11 +130,13 @@
             code.setAttribute('class', 'code');
 
             let timeCode;
+
             try {
                 timeCode = totp.getOtp(data.secret);
             } catch ( ex) {
                 timeCode = 'Error';
             }
+
             code.textContent = timeCode;
 
             name.setAttribute('class', 'name');
@@ -116,8 +151,6 @@
             var i = 0;
             var toRemove = 100 / expirySeconds / framesPerSecond;
             var loop = setInterval(function() {
-                i++;
-                // console.log(i);
                 lineTime.style.width = (100 - i * toRemove) + '%';
 
                 if ( i == expirySeconds * framesPerSecond) {
@@ -132,62 +165,11 @@
             return block;
         };
 
-        var copyClipboard = function() {
-            console.log('copy clipboard funtion ');
-            let code = this.querySelector('.code');
-            let textarea = document.createElement('textarea');
-            textarea.setAttribute('class', 'copy-area');
-            textarea.value = code.textContent;
-
-            console.log('textarea value: ' + textarea.value);
-
-            container.appendChild(textarea);
-
-            textarea.select();
-
-            try {
-                var text = document.execCommand('copy');
-                console.log('copied text is: ' + text);
-                notice('Copied!');
-            } catch (ex) {
-                notice('Can not copied!');
-            } finally {
-                container.removeChild(textarea);
-            }
-
-        };
-
-        var notice = function(msg) {
-            var alert = document.createElement('div');
-            alert.setAttribute('class', 'alert');
-            alert.textContent = msg;
-
-            container.appendChild(alert);
-
-            setTimeout(function() {
-                container.removeChild(alert);
-            }, 500);
-        };
-
-
-
-        var reRenderBlock = function(block, data) {
-            var code = block.querySelector('.code');
-            var name = block.querySelector('.name');
-            var lineTime = block.querySelector('.line-time');
-
-            let timeCode;
-            try {
-                timeCode = totp.getOtp(data.secret);
-            } catch ( ex) {
-                timeCode = 'Error';
-            }
-
-            code.textContent = timeCode;
-
-            lineTime.style.width = '100%';
-        };
-
+        /**
+         * render setting page
+         * 
+         * @return {[type]} [description]
+         */
         var renderSettingPage = function() {
 
             removeAllChild(settingPage);
@@ -245,6 +227,11 @@
             return formGroup;
         }
 
+        /**
+         * save settings on seting page
+         * 
+         * @return {[type]} [description]
+         */
         var saveSettings = function() {
             console.log('click save');
             var formGroups = document.querySelectorAll('.form-group');
@@ -268,17 +255,50 @@
                 }
 
                 item = browser.storage.local.set(data);
-                // console.log(data);
                 item.then(() => {
+                    notice('Success!');
                     renderMainPage();
+                    showMainPage();
                 }, onError);
 
             }, onError);
+        };
 
-            // var item = browser.storage.local.set({
-            //     [obj.account] : obj
-            // });
+        var copyClipboard = function() {
+            let code = this.querySelector('.code');
+            let textarea = document.createElement('textarea');
+            textarea.setAttribute('class', 'copy-area');
+            textarea.value = code.textContent;
 
+            container.appendChild(textarea);
+
+            textarea.select();
+
+            try {
+                var text = document.execCommand('copy');
+            } catch (ex) {
+                notice('Can not copied!');
+            } finally {
+                container.removeChild(textarea);
+            }
+        };
+
+        /**
+         * alert message after an action
+         * 
+         * @param  {[type]} msg [description]
+         * @return {[type]}     [description]
+         */
+        var notice = function(msg) {
+            var alert = document.createElement('div');
+            alert.setAttribute('class', 'alert');
+            alert.textContent = msg;
+
+            container.appendChild(alert);
+
+            setTimeout(function() {
+                container.removeChild(alert);
+            }, 500);
         };
 
         var hide = function(selector) {
