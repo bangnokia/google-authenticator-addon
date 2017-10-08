@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Google Authenticator",
-	"version": "3.22_",
+	"version": "3.22__",
 
 	"description": "Google authenticate code generation",
 	"homepage_url": "https://github.com/bangnokia/google-authenticator-addon",
