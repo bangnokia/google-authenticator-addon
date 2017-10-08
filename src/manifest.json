@@ -1,10 +1,10 @@
 {
 	"manifest_version": 2,
 	"name": "Google Authenticator",
-	"version": "3.14",
+	"version": "3.222",
 
 	"description": "Google authenticate code generation",
-	"homepage_url": "http://daudau.cc",
+	"homepage_url": "https://github.com/bangnokia/google-authenticator-addon",
 	"icons": {
 		"48": "icons/icon48.png"
 	},
@@ -18,5 +18,11 @@
 	"permissions": [
 		"storage",
 		"clipboardWrite"
-	]
+	],
+
+	"applications": {
+		"gecko": {
+			"id": "googleauthenticator@daudau.cc"
+		}
+	}
 }
