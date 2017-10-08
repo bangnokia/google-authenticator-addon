@@ -277,6 +277,7 @@
 
             try {
                 var text = document.execCommand('copy');
+                notice('Copied!');
             } catch (ex) {
                 notice('Can not copied!');
             } finally {
@@ -290,7 +291,8 @@
          * @param  {[type]} msg [description]
          * @return {[type]}     [description]
          */
-        var notice = function(msg) {
+        var notice = function(msg, timeLive) {
+            timeLive = timeLive || 500;
             var alert = document.createElement('div');
             alert.setAttribute('class', 'alert');
             alert.textContent = msg;
@@ -299,7 +301,7 @@
 
             setTimeout(function() {
                 container.removeChild(alert);
-            }, 500);
+            }, timeLive);
         };
 
         var hide = function(selector) {
