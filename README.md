@@ -6,5 +6,9 @@ addon 2 factor authentication for firefox
 - To build this addon, you can use web-ext for folder src.
 - To install plugin, select lastest version in folder dist. Filefox -> File -> Open
 
+Demo image:
+
+![google authenticator addon firefox](./screenshot.png)
+
 ! thank you.
 
