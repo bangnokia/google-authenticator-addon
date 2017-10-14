@@ -180,7 +180,6 @@
             gettingAllAccounts.then((results) => {
                 for (let key in results) {
                     var account = results[key];
-                    console.log(account);
                     settingPage.appendChild(initFormGroup(account));
                 }
             }, onError);
@@ -193,7 +192,6 @@
 
         var initFormGroup = function(data) {
             data = data || {};
-            // console.log(data);
             var formGroup = document.createElement('div');
             var account = document.createElement('input');
             var secret = document.createElement('input');
@@ -234,7 +232,6 @@
          * @return {[type]} [description]
          */
         var saveSettings = function() {
-            console.log('click save');
             var formGroups = document.querySelectorAll('.form-group');
             var data = {};
 
